@@ -29,13 +29,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
              KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
     _______, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFTENTR,
-    TL_UPPR, LOSPACE, KC_RCMD, QK_AREP
+    TL_UPPR, TL_LOWR, KC_RCMD, QK_AREP
   ),
+
   /* LOWER */
   [_LOWER] = LAYOUT(
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,
-    _______, _______, _______, _______, _______, _______,
-    _______, _______, _______, _______, _______, _______, MACROR1,
+    _______, _______, KC_BTN2, KC_MS_U, KC_BTN1, KC_WH_D,
+    _______, _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_U, MACROR1,
                                _______, _______, _______, _______,
 
              KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
@@ -46,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* RAISE */
   [_RAISE] = LAYOUT(
     KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,
-    KC_CAPS, _______, _______, KC_PLUS, KC_UNDS, _______,
+    KC_CAPS, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, MACROP1,
                                _______, _______, _______, _______,
 
@@ -93,7 +94,7 @@ const uint16_t PROGMEM plus[]  = { KC_K, KC_L, COMBO_END };
 
 // - and _
 const uint16_t PROGMEM dash[] = { KC_D, KC_F, COMBO_END };
-const uint16_t PROGMEM unds[] = { KC_J, KC_L, COMBO_END };
+const uint16_t PROGMEM unds[] = { KC_J, KC_K, COMBO_END };
 
 // Media Prev and Next
 const uint16_t PROGMEM media_prev[] = { KC_VOLD, KC_MPLY, COMBO_END };
@@ -103,8 +104,8 @@ const uint16_t PROGMEM media_next[] = { KC_VOLU, KC_MPLY, COMBO_END };
 const uint16_t PROGMEM swap_lh[] = { KC_A, KC_S, KC_D, KC_F, COMBO_END };
 const uint16_t PROGMEM swap_rh[] = { KC_J, KC_K, KC_L, KC_SCLN, COMBO_END };
 
-// Spotlight (LGUI + SPACE)
-const uint16_t PROGMEM spotlight[] = { KC_LGUI, LOSPACE, COMBO_END };
+// Leader keys
+const uint16_t PROGMEM spotlight[] = { KC_LGUI, TL_LOWR, COMBO_END };
 
 combo_t key_combos[] = {
   COMBO(left_paren,    KC_LPRN),
@@ -150,5 +151,17 @@ const keypos_t PROGMEM hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
   {{5,2}, {4,2}, {3,2}, {2,2}, {1,2}, {0,2}},
   {{5,3}, {4,3}, {3,3}, {2,3}, {1,3}, _____},
 };
+
+/* PERMISSIVE HOLDS */
+bool get_hold_on_other_key_press_per_key(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case LCTLESC:
+    case SFTENTR:
+      return true;
+
+    default:
+      return false;
+  }
+}
 
 // vim: ts=2 sw=2 et
