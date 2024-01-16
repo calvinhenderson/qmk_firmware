@@ -1,0 +1,34 @@
+{
+    "keyboard_name": "tkl",
+    "url": "https://github.com/calvinhenderson/handwired-tkl",
+    "maintainer": "Calvin Henderson",
+    "manufacturer": "Calvin Henderson",
+    "usb": {
+        "vid": "0xFEED",
+        "pid": "0x0000",
+        "device_version": "1.0.0"
+    },
+    "bootmagic": {
+        "matrix": [0,0]
+    },
+    "features": {
+        "bootmagic": true
+    },
+    "dynamic_keymap": {
+        "layer_count": 3
+    },
+    "board": "PJRC_TEENSY_3_1",
+    "processor": "MK20DX256",
+    "bootloader": "halfkay",
+    "diode_direction": "COL2ROW",
+    "matrix_pins": {
+        "cols": ["F6", "F7", "B1", "B3", "B2", "B6"],
+        "rows": ["C6", "D7", "E6", "B4", "B5"]
+    },
+    "layouts": {
+        "LAYOUT": {
+            "layout": [
+            ]
+        }
+    }
+}
