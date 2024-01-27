@@ -9,6 +9,8 @@ enum layers {
   _FUN,
 };
 
+#define xxxxxxx KC_NO
+
 #define SE_BASE TO(_BASE)
 #define SE_SYM  TG(_SYM)
 #define SE_NAV  TG(_NAV)
@@ -16,16 +18,16 @@ enum layers {
 #define SE_FUN  TG(_FUN)
 
 #define SE_SPC MT(MOD_MEH,KC_SPACE)
-#define SE_SHFT OSM(MOD_LSFT)
+#define OS_SHFT OSM(MOD_LSFT)
 #define SE_R LOPT_T(KC_R)
 #define SE_T LCMD_T(KC_T)
 #define SE_N RCMD_T(KC_N)
 #define SE_E ROPT_T(KC_E)
 
-#define SE_LABK LOPT_T(KC_LABK)
-#define SE_RABK LCMD_T(KC_RABK)
-#define SE_RCBR RCMD_T(KC_RCBR)
-#define SE_LCBR ROPT_T(KC_LCBR)
+#define SE_MINS LOPT_T(KC_MINS)
+#define SE_PIPE LCMD_T(KC_PIPE)
+#define SE_LABK RCMD_T(KC_LABK)
+#define SE_RABK ROPT_T(KC_RABK)
 
 #define OS_LGUI OSM(MOD_MASK_CTRL)
 #define OS_LOPT OSM(MOD_MASK_ALT)

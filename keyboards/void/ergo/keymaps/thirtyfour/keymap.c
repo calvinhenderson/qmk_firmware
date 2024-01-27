@@ -5,7 +5,9 @@
 
 /* KEYMAPS */
 enum custom_keycodes {
-  NAV_Q = SAFE_RANGE,
+  SE_COMM = SAFE_RANGE,
+  SE_DOT,
+  SE_SLSH,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -19,32 +21,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_Y,    KC_C,    KC_L,    KC_M,    KC_K,
     KC_I,    KC_S,    SE_R,    SE_T,    KC_G,
     KC_Q,    KC_V,    KC_W,    KC_D,    KC_J,
-                               SE_SPC,  SE_SHFT,
+                               SE_SPC,  OS_SHFT,
 
-    KC_Z,    KC_F,    KC_U,    KC_COMM, KC_BSPC,
+    KC_Z,    KC_F,    KC_U,    SE_COMM, KC_BSPC,
     KC_P,    SE_N,    SE_E,    KC_A,    KC_O,
-    KC_B,    KC_H,    KC_SLSH, KC_DOT,  KC_X,
+    KC_B,    KC_H,    SE_SLSH, SE_DOT,  KC_X,
     KC_LCTL, SE_SYM
   ),
 
   /* Symbols */
   [_SYM] = LAYOUT(
-    KC_ESC,  KC_AT,   KC_HASH, KC_DLR,  KC_PERC,
-    KC_TAB,  KC_EQL,  SE_LABK, SE_RABK, KC_QUOT,
-    KC_GRV,  _______, KC_COMM, KC_DOT,  KC_DQUO,
-                               SE_BASE, SE_SHFT,
+    KC_TAB,  KC_AT,   KC_HASH, KC_DLR,  KC_PERC,
+    KC_ESC,  KC_LCBR, SE_MINS, SE_PIPE, KC_QUOT,
+    KC_GRV,  KC_EQL,  KC_COMM, KC_DOT,  KC_DQUO,
+                               SE_BASE, OS_SHFT,
 
     KC_CIRC, KC_AMPR, KC_ASTR, KC_SCLN, KC_BSPC,
-    KC_BSLS, SE_RCBR, SE_LCBR, KC_PIPE, KC_ENT,
+    KC_BSLS, SE_RABK, SE_LABK, KC_RCBR, KC_ENT,
     KC_RBRC, KC_RPRN, KC_LPRN, KC_LBRC, SE_NAV,
-    KC_ROPT, SE_NUM
+    KC_LCTL, SE_NUM
   ),
 
   /* Navigation */
   [_NAV] = LAYOUT(
-    _______, KC_WH_L, KC_MS_U, KC_WH_R, NAV_Q,
-    _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_DEL,
-    KC_TILD, KC_BTN2, KC_WH_U, KC_WH_D, _______,
+    KC_TAB,  KC_WH_L, KC_MS_U, KC_WH_R, G(KC_Q),
+    KC_ESC,  KC_MS_L, KC_MS_D, KC_MS_R, KC_DEL,
+    KC_TILD, xxxxxxx, KC_WH_U, KC_WH_D, KC_BTN2,
                                SE_BASE, KC_LCMD,
 
     KC_WBAK, PRV_TAB, NXT_TAB, KC_WFWD, KC_BSPC,
@@ -55,9 +57,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Numbers */
   [_NUM] = LAYOUT(
-    KC_ESC,  KC_MPLY, KC_MPRV, KC_MNXT, KC_UNDS,
-    KC_TAB,  KC_MUTE, KC_VOLD, KC_VOLU, KC_PLUS,
-    KC_GRV,  KC_AMPR, KC_BRID, KC_BRIU, KC_DOT,
+    KC_TAB,  KC_MPLY, KC_MPRV, KC_MNXT, KC_PLUS,
+    KC_ESC,  KC_MUTE, KC_VOLD, KC_VOLU, KC_COMM,
+    KC_GRV,  KC_UNDS, KC_BRID, KC_BRIU, KC_DOT,
                                SE_BASE, KC_LCMD,
 
     KC_MINS, KC_7,    KC_8,    KC_9,    KC_BSPC,
@@ -67,25 +69,95 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_FUN] = LAYOUT(
-    _______, _______, _______, _______, DM_REC1,
-    _______, OS_LCTL, OS_LOPT, OS_LGUI, DM_PLY1,
-    _______, _______, _______, _______, DM_RSTP,
+    KC_TAB,  xxxxxxx, xxxxxxx, xxxxxxx, DM_REC1,
+    KC_ESC,  OS_LCTL, OS_LOPT, OS_LGUI, DM_PLY1,
+    xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, DM_RSTP,
                                SE_BASE, KC_LCMD,
 
-    _______, KC_F7,   KC_F8,   KC_F9,   KC_F12,
-    _______, KC_F4,   KC_F5,   KC_F6,   KC_F11,
-    _______, KC_F1,   KC_F2,   KC_F3,   KC_F10,
+    xxxxxxx, KC_F7,   KC_F8,   KC_F9,   KC_F12,
+    xxxxxxx, KC_F4,   KC_F5,   KC_F6,   KC_F11,
+    xxxxxxx, KC_F1,   KC_F2,   KC_F3,   KC_F10,
     KC_ROPT, SE_NUM
   )
 };
 
-/* Key overrides */
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    /* Override Shift + Backspace => Delete */
+    case KC_BSPC:
+      if (get_mods() == MOD_MASK_SHIFT) {
+        if (record->event.pressed) {
+          register_code(KC_DEL);
+        } else {
+          unregister_code(KC_DEL);
+        }
+        return false;
+      }
+      return true;
+    /* Override SE_RCBR to ensure shifted key is sent */
+    case RCMD_T(KC_RCBR):
+      if (record->tap.count && record->event.pressed) {
+        tap_code16(KC_RCBR);
+        return false;
+      }
+      break;
+    /* Override SE_LCBR to ensure shifted key is sent */
+    case ROPT_T(KC_LCBR):
+      if (record->tap.count && record->event.pressed) {
+        tap_code16(KC_LCBR);
+        return false;
+      }
+      break;
+  }
+  return true;
+}
 
-const key_override_t nav_q_override = ko_make_basic(MOD_MASK_SHIFT, KC_Q, G(KC_Q));
+/* Auto-shift overrides */
 
-const key_override_t **key_overrides = (const key_override_t *[]){
-  &nav_q_override,
-  NULL
-};
+bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case SE_COMM:
+    case SE_DOT:
+    case SE_SLSH:
+      return true;
+    default:
+      return false;
+  }
+}
+
+void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
+  switch (keycode) {
+    case SE_COMM:
+      register_code16(shifted ? KC_SCLN : KC_COMM);
+      break;
+    case SE_DOT:
+      register_code16(shifted ? KC_UNDS : KC_DOT);
+      break;
+    case SE_SLSH:
+      register_code16(shifted ? KC_COLN : KC_SLSH);
+      break;
+    default:
+      if (shifted) {
+        add_weak_mods(MOD_BIT(KC_LSFT));
+      }
+      register_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
+  }
+}
+
+void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
+  switch (keycode) {
+    case SE_COMM:
+      unregister_code16(shifted ? KC_SCLN : KC_COMM);
+      break;
+    case SE_DOT:
+      unregister_code16(shifted ? KC_UNDS : KC_DOT);
+      break;
+    case SE_SLSH:
+      unregister_code16(shifted ? KC_COLN : KC_SLSH);
+      break;
+    default:
+      unregister_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
+  }
+}
 
 // vim: ts=2 sw=2 et
