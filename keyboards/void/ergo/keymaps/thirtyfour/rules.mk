@@ -1,0 +1,28 @@
+# Easier combo definitions
+VPATH += keyboards/gboards/
+
+# Logging / Debug
+CONSOLE_ENABLE = no
+VERBOSE = no
+
+# Features
+COMBO_ENABLE = yes
+CAPS_WORD_ENABLE = yes
+AUTO_SHIFT_ENABLE = yes
+REPEAT_KEY_ENABLE = yes
+KEY_OVERRIDE_ENABLE = yes
+EXTRAKEY_ENABLE = yes
+MOUSEKEY_ENABLE = yes
+WPM_ENABLE = no
+LEADER_ENABLE = no
+TAP_DANCE_ENABLE = no
+RGB_MATRIX_ENABLE = no
+RGBLIGHT_ENABLE = no
+SPACE_CADET_ENABLE = no
+MAGIC_ENABLE = no
+GRAVE_ESC_ENABLE = no
+
+# Firmware optimizations
+LTO_ENABLE = yes
+DEBUG_MATRIX = no
+DEBUG_MATRIX_SCAN_RATE = no

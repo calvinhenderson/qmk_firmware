@@ -1,0 +1,5 @@
+DEFAULT_REF_LAYER(_BASE)
+
+COMB(THUMBS_CAPSWORD,  CW_TOGG, SE_SHFT, SE_SYM)
+
+// vim: ts=2 sw=2 et ft=c
