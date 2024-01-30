@@ -33,6 +33,8 @@ enum layers {
 #define SE_LCBR LCTL_T(KC_LCBR)
 #define SE_RCBR RCTL_T(KC_RCBR)
 
+#define SE_LOCK G(C(KC_Q))
+
 #define OS_LGUI OSM(MOD_MASK_CTRL)
 #define OS_LOPT OSM(MOD_MASK_ALT)
 #define OS_LCTL OSM(MOD_MASK_GUI)

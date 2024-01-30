@@ -32,78 +32,62 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* Symbols */
   [_SYM] = LAYOUT(
     KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,
-    KC_ESC,  SE_LCBR, SE_MINS, SE_PIPE, KC_QUOT,
-    KC_GRV,  KC_EQL,  KC_PLUS, KC_QUES, KC_DQUO,
+    KC_UNDS, SE_LCBR, SE_MINS, SE_PIPE, KC_DQUO,
+    KC_GRV,  KC_EQL,  KC_PLUS, KC_QUES, KC_QUOT,
                                SE_BASE, OS_SHFT,
 
     KC_CIRC, KC_AMPR, KC_ASTR, KC_SCLN, KC_BSPC,
-    KC_BSLS, SE_RABK, SE_LABK, SE_RCBR, KC_ENT,
+    KC_BSLS, SE_RABK, SE_LABK, SE_RCBR, KC_TILD,
     KC_RBRC, KC_RPRN, KC_LPRN, KC_LBRC, SE_FUN,
     _______, _______
   ),
 
   /* Navigation */
   [_NAV] = LAYOUT(
-    KC_TAB,  KC_WH_L, KC_MS_U, KC_WH_R, xxxxxxx,
-    KC_ESC,  KC_MS_L, KC_MS_D, KC_MS_R, KC_DEL,
+    SE_LOCK, KC_WH_L, KC_MS_U, KC_WH_R, xxxxxxx,
+    KC_LSFT, KC_MS_L, KC_MS_D, KC_MS_R, xxxxxxx,
     G(KC_Q), KC_TILD, KC_WH_U, KC_WH_D, KC_BTN2,
                                SE_BASE, KC_LCMD,
 
-    WWW_PRV, TAB_PRV, TAB_NXT, WWW_NXT, KC_BSPC,
-    KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_ENT,
+    WWW_PRV, TAB_PRV, TAB_NXT, WWW_NXT, KC_DEL,
+    KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, xxxxxxx,
     KC_BTN1, KC_ACL0, KC_ACL1, KC_ACL2, SE_FUN,
     KC_ROPT, _______
   ),
 
   /* Numbers */
   [_NUM] = LAYOUT(
-    KC_TAB,  KC_MPLY, KC_MPRV, KC_MNXT, KC_PLUS,
-    KC_ESC,  KC_MUTE, KC_VOLD, KC_VOLU, KC_COMM,
-    KC_GRV,  KC_UNDS, KC_BRID, KC_BRIU, KC_DOT,
-                               SE_BASE, KC_LCMD,
+    xxxxxxx, KC_MPLY, KC_MPRV, KC_MNXT, KC_UNDS,
+    xxxxxxx, KC_MUTE, KC_VOLD, KC_VOLU, KC_COMM,
+    KC_GRV,  xxxxxxx, KC_BRID, KC_BRIU, KC_DOT,
+                               SE_BASE, _______,
 
-    KC_MINS, KC_7,    KC_8,    KC_9,    KC_BSPC,
-    KC_EQL,  KC_4,    KC_5,    KC_6,    KC_ENT,
+    KC_MINS, KC_7,    KC_8,    KC_9,    KC_ASTR,
+    KC_EQL,  KC_4,    KC_5,    KC_6,    KC_PLUS,
     KC_0,    KC_1,    KC_2,    KC_3,    SE_FUN,
     _______, _______
   ),
 
   [_FUN] = LAYOUT(
-    KC_TAB,  xxxxxxx, xxxxxxx, xxxxxxx, DM_REC1,
-    KC_ESC,  OS_LCTL, OS_LOPT, OS_LGUI, DM_PLY1,
+    xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, DM_REC1,
+    xxxxxxx, OS_LCTL, OS_LOPT, OS_LGUI, DM_PLY1,
     xxxxxxx, xxxxxxx, xxxxxxx, xxxxxxx, DM_RSTP,
                                SE_BASE, KC_LCMD,
 
-    xxxxxxx, KC_F7,   KC_F8,   KC_F9,   KC_F12,
+    xxxxxxx, KC_F7,   KC_F8,   KC_F9,   KC_F10,
     xxxxxxx, KC_F4,   KC_F5,   KC_F6,   KC_F11,
-    xxxxxxx, KC_F1,   KC_F2,   KC_F3,   KC_F10,
-    KC_ROPT, SE_NUM
+    xxxxxxx, KC_F1,   KC_F2,   KC_F3,   KC_F12,
+    _______, _______
   )
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  static uint8_t saved_mods = 0;
   switch (keycode) {
-    /* Override Shift + Backspace => Delete */
-    case KC_BSPC:
-      saved_mods = get_mods();
-      if (saved_mods & MOD_MASK_SHIFT) {
-        if (record->event.pressed) {
-          del_mods(saved_mods);
-          register_code(KC_DEL);
-          add_mods(saved_mods);
-        } else {
-          unregister_code(KC_DEL);
-        }
-        return false;
-      }
-      return true;
     case SE_RCBR:
     case SE_LCBR:
     case SE_LABK:
     case SE_RABK:
     case SE_PIPE:
-    case SE_MINS:
       if (record->tap.count) {
         add_weak_mods(MOD_MASK_SHIFT);
       }
