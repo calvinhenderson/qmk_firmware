@@ -15,44 +15,44 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *   Y   C   L   M   K        Z   F   U   ,   <-
    *   I   S   R   T   G        P   N   E   A   O
    *   Q   V   W   D   J        B   H   /   .   X
-   *               _   +        ^   1
+   *               _   Sft      L2  L1
    */
   [_BASE] = LAYOUT(
     KC_Y,    KC_C,    KC_L,    KC_M,    KC_K,
-    KC_I,    KC_S,    SE_R,    SE_T,    KC_G,
+    KC_I,    SE_S,    SE_R,    SE_T,    KC_G,
     KC_Q,    KC_V,    KC_W,    KC_D,    KC_J,
                                SE_SPC,  OS_SHFT,
 
     KC_Z,    KC_F,    KC_U,    SE_COMM, KC_BSPC,
-    KC_P,    SE_N,    SE_E,    KC_A,    KC_O,
+    KC_P,    SE_N,    SE_E,    SE_A,    KC_O,
     KC_B,    KC_H,    SE_SLSH, SE_DOT,  KC_X,
-    KC_LCTL, SE_SYM
+    SE_NUM,  SE_SYM
   ),
 
   /* Symbols */
   [_SYM] = LAYOUT(
-    KC_TAB,  KC_AT,   KC_HASH, KC_DLR,  KC_PERC,
-    KC_ESC,  KC_LCBR, SE_MINS, SE_PIPE, KC_QUOT,
-    KC_GRV,  KC_EQL,  KC_COMM, KC_DOT,  KC_DQUO,
+    KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,
+    KC_ESC,  SE_LCBR, SE_MINS, SE_PIPE, KC_QUOT,
+    KC_GRV,  KC_EQL,  KC_PLUS, KC_QUES, KC_DQUO,
                                SE_BASE, OS_SHFT,
 
     KC_CIRC, KC_AMPR, KC_ASTR, KC_SCLN, KC_BSPC,
-    KC_BSLS, SE_RABK, SE_LABK, KC_RCBR, KC_ENT,
-    KC_RBRC, KC_RPRN, KC_LPRN, KC_LBRC, SE_NAV,
-    KC_LCTL, SE_NUM
+    KC_BSLS, SE_RABK, SE_LABK, SE_RCBR, KC_ENT,
+    KC_RBRC, KC_RPRN, KC_LPRN, KC_LBRC, SE_FUN,
+    _______, _______
   ),
 
   /* Navigation */
   [_NAV] = LAYOUT(
-    KC_TAB,  KC_WH_L, KC_MS_U, KC_WH_R, G(KC_Q),
+    KC_TAB,  KC_WH_L, KC_MS_U, KC_WH_R, xxxxxxx,
     KC_ESC,  KC_MS_L, KC_MS_D, KC_MS_R, KC_DEL,
-    KC_TILD, xxxxxxx, KC_WH_U, KC_WH_D, KC_BTN2,
+    G(KC_Q), KC_TILD, KC_WH_U, KC_WH_D, KC_BTN2,
                                SE_BASE, KC_LCMD,
 
-    KC_WBAK, PRV_TAB, NXT_TAB, KC_WFWD, KC_BSPC,
+    WWW_PRV, TAB_PRV, TAB_NXT, WWW_NXT, KC_BSPC,
     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_ENT,
     KC_BTN1, KC_ACL0, KC_ACL1, KC_ACL2, SE_FUN,
-    KC_ROPT, SE_SYM
+    KC_ROPT, _______
   ),
 
   /* Numbers */
@@ -65,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_MINS, KC_7,    KC_8,    KC_9,    KC_BSPC,
     KC_EQL,  KC_4,    KC_5,    KC_6,    KC_ENT,
     KC_0,    KC_1,    KC_2,    KC_3,    SE_FUN,
-    KC_ROPT, SE_SYM
+    _______, _______
   ),
 
   [_FUN] = LAYOUT(
@@ -82,30 +82,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  static uint8_t saved_mods = 0;
   switch (keycode) {
     /* Override Shift + Backspace => Delete */
     case KC_BSPC:
-      if (get_mods() == MOD_MASK_SHIFT) {
+      saved_mods = get_mods();
+      if (saved_mods & MOD_MASK_SHIFT) {
         if (record->event.pressed) {
+          del_mods(saved_mods);
           register_code(KC_DEL);
+          add_mods(saved_mods);
         } else {
           unregister_code(KC_DEL);
         }
         return false;
       }
       return true;
-    /* Override SE_RCBR to ensure shifted key is sent */
-    case RCMD_T(KC_RCBR):
-      if (record->tap.count && record->event.pressed) {
-        tap_code16(KC_RCBR);
-        return false;
-      }
-      break;
-    /* Override SE_LCBR to ensure shifted key is sent */
-    case ROPT_T(KC_LCBR):
-      if (record->tap.count && record->event.pressed) {
-        tap_code16(KC_LCBR);
-        return false;
+    case SE_RCBR:
+    case SE_LCBR:
+    case SE_LABK:
+    case SE_RABK:
+    case SE_PIPE:
+    case SE_MINS:
+      if (record->tap.count) {
+        add_weak_mods(MOD_MASK_SHIFT);
       }
       break;
   }
@@ -116,6 +116,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    case SE_S:
+    case SE_R:
+    case SE_T:
+    case SE_N:
+    case SE_E:
+    case SE_A:
     case SE_COMM:
     case SE_DOT:
     case SE_SLSH:
@@ -160,4 +166,4 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
   }
 }
 
-// vim: ts=2 sw=2 et
+// vim: ts=2 sw=2 et eventignore=BufWritePre

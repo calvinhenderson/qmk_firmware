@@ -13,7 +13,8 @@
 #define ONESHOT_TIMEOUT 5000
 
 // Auto-shift
-#define AUTO_SHIFT_TIMEOUT 200
+#define AUTO_SHIFT_TIMEOUT 180
+#define RETRO_SHIFT 500
 
 // Combos
 #define COMBO_TERM 40
