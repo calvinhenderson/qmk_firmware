@@ -17,23 +17,23 @@ enum layers {
 #define SE_SPC  LT(_NAV, KC_SPACE)
 #define OS_SHFT OSM(MOD_LSFT)
 
-#define SE_I MEH_T(KC_I)
+#define SE_I HYPR_T(KC_I)
 #define SE_S LCTL_T(KC_S)
 #define SE_R LOPT_T(KC_R)
 #define SE_T LCMD_T(KC_T)
 #define SE_N RCMD_T(KC_N)
 #define SE_E ROPT_T(KC_E)
 #define SE_A RCTL_T(KC_A)
-#define SE_O MEH_T(KC_O)
+#define SE_O HYPR_T(KC_O)
 
-#define SE_GRV  MEH_T(KC_GRV)
+#define SE_GRV  HYPR_T(KC_GRV)
 #define SE_LBRC LCTL_T(KC_LBRC)
 #define SE_LCBR LOPT_T(KC_LCBR)
 #define SE_EQL  LCMD_T(KC_EQL)
 #define SE_UNDS RCMD_T(KC_UNDS)
 #define SE_RCBR ROPT_T(KC_RCBR)
 #define SE_RBRC RCTL_T(KC_RBRC)
-#define SE_SCLN MEH_T(KC_SCLN)
+#define SE_SCLN HYPR_T(KC_SCLN)
 
 #define SE_LOCK G(C(KC_Q))
 

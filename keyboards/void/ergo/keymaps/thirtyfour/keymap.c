@@ -16,7 +16,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* Base layer
    *   Home Row Mods:
    *      I   S   R   T    N   E   A   O
-   *     MEH CTL OPT CMD  CMD OPT CTL MEH
+   *    HYPR CTL OPT CMD  CMD OPT CTL HYPR
    *
    *   Base layer:
    *     Y   C   L   M   K        Z   F   U   ,   @
