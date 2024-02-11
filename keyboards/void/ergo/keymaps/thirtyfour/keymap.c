@@ -58,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     WWW_PRV, TAB_PRV, TAB_NXT, WWW_NXT, KC_DEL,
     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, xxxxxxx,
-    KC_BTN1, KC_BTN2, xxxxxxx, xxxxxxx, SE_BASE,
+    xxxxxxx, KC_BTN1, KC_BTN2, xxxxxxx, SE_BASE,
     _______, _______
   ),
 
@@ -78,7 +78,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case SE_RCBR:
-    case SE_LCBR:
       if (record->tap.count) {
         add_weak_mods(MOD_MASK_SHIFT);
       }
@@ -106,6 +105,8 @@ bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
     case SE_SLSH:
     case SE_AT:
     case SE_LPRN:
+    case SE_LCBR:
+    case SE_LBRC:
     case KC_PIPE:
       return true;
     default:
@@ -135,13 +136,25 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
       }
       break;
     case KC_PIPE:
-      SEND_STRING("|>");
+      if (shifted) {
+        SEND_STRING("|>");
+      } else {
+        register_code16(KC_PIPE);
+      }
       break;
     case SE_LBRC:
-      SEND_STRING("[]" SS_TAP(X_LEFT));
+      if (shifted) {
+        SEND_STRING("[]" SS_TAP(X_LEFT));
+      } else {
+        register_code(KC_LBRC);
+      }
       break;
     case SE_LCBR:
-      SEND_STRING("{}" SS_TAP(X_LEFT));
+      if (shifted) {
+        SEND_STRING("{}" SS_TAP(X_LEFT));
+      } else {
+        register_code16(KC_LCBR);
+      }
       break;
     default:
       if (shifted) {
@@ -162,16 +175,18 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
     case SE_SLSH:
       unregister_code16(shifted ? KC_COLN : KC_SLSH);
       break;
-    case SE_LPRN:
-      if (!shifted) unregister_code16(KC_LPRN);
-      break;
     case SE_AT:
       unregister_code16(shifted ? KC_DQUO : KC_AT);
       break;
+    case SE_LPRN:
     case SE_LBRC:
     case SE_LCBR:
     case KC_PIPE:
-      // Do nothing because a macro was executed.
+      // Do nothing if a macro was executed.
+      if (!shifted) {
+        // Otherwise release the key
+        unregister_code16(keycode);
+      }
       break;
     default:
       unregister_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);

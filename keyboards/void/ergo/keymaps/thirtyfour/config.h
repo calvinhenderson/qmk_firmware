@@ -13,11 +13,11 @@
 #define ONESHOT_TIMEOUT 5000
 
 // Auto-shift
-#define AUTO_SHIFT_TIMEOUT 150
+#define AUTO_SHIFT_TIMEOUT 185
 #define RETRO_SHIFT 500
 
 // Combos
-#define COMBO_TERM 30
+#define COMBO_TERM 50
 
 // Mouse keys
 #define MOUSEKEY_INERTIA
