@@ -12,7 +12,7 @@ enum layers {
 
 #define SE_BASE TO(_BASE)
 #define SE_SYM  OSL(_SYM)
-#define SE_FUN  TG(_FUN)
+#define SE_FUN  OSL(_FUN)
 
 #define SE_SPC  LT(_NAV, KC_SPACE)
 #define OS_SHFT OSM(MOD_LSFT)

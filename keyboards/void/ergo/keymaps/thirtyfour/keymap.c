@@ -99,6 +99,8 @@ bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
     case SE_E:
     case SE_A:
     case SE_O:
+    case SE_EQL:
+    case SE_SCLN:
     /* Override shifted variants */
     case SE_COMM:
     case SE_DOT:
@@ -107,8 +109,10 @@ bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
     case SE_LPRN:
     case SE_LCBR:
     case SE_LBRC:
+    case SE_GRV:
     case KC_PIPE:
     case KC_BSLS:
+    case KC_LABK:
       return true;
     default:
       return false;
@@ -134,6 +138,13 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
         SEND_STRING("()" SS_TAP(X_LEFT));
       } else {
         register_code16(KC_LPRN);
+      }
+      break;
+    case SE_GRV:
+      if (shifted) {
+        SEND_STRING("``" SS_TAP(X_LEFT));
+      } else {
+        register_code16(KC_GRV);
       }
       break;
     case KC_PIPE:
@@ -164,6 +175,13 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
         register_code16(KC_LCBR);
       }
       break;
+    case KC_LABK:
+      if (shifted) {
+        SEND_STRING("<>");
+      } else {
+        register_code16(KC_LABK);
+      }
+      break;
     default:
       if (shifted) {
         add_weak_mods(MOD_BIT(KC_LSFT));
@@ -187,10 +205,20 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
       unregister_code16(shifted ? KC_DQUO : KC_AT);
       break;
     case SE_LPRN:
+      if (!shifted) { unregister_code16(KC_LPRN); }
+      break;
     case SE_LBRC:
+      if (!shifted) { unregister_code16(KC_LBRC); }
+      break;
     case SE_LCBR:
+      if (!shifted) { unregister_code16(KC_LCBR); }
+      break;
+    case SE_GRV:
+      if (!shifted) { unregister_code16(KC_GRV); }
+      break;
     case KC_PIPE:
     case KC_BSLS:
+    case KC_LABK:
       // Do nothing if a macro was executed.
       if (!shifted) {
         // Otherwise release the key
