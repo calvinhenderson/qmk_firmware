@@ -40,7 +40,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_SYM] = LAYOUT(
     KC_1,    KC_2,    KC_3,    KC_4,    KC_5,
     SE_GRV,  SE_LBRC, SE_LCBR, SE_EQL,  KC_DQUO,
-    KC_TILD, xxxxxxx, KC_PIPE, KC_PLUS, KC_QUOT,
+    KC_TILD, KC_BSLS, KC_PIPE, KC_PLUS, KC_QUOT,
                                _______, _______,
 
     KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
@@ -108,6 +108,7 @@ bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
     case SE_LCBR:
     case SE_LBRC:
     case KC_PIPE:
+    case KC_BSLS:
       return true;
     default:
       return false;
@@ -140,6 +141,13 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
         SEND_STRING("|>");
       } else {
         register_code16(KC_PIPE);
+      }
+      break;
+    case KC_BSLS:
+      if (shifted) {
+        SEND_STRING("\\\\");
+      } else {
+        register_code16(KC_BSLS);
       }
       break;
     case SE_LBRC:
@@ -182,6 +190,7 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record)
     case SE_LBRC:
     case SE_LCBR:
     case KC_PIPE:
+    case KC_BSLS:
       // Do nothing if a macro was executed.
       if (!shifted) {
         // Otherwise release the key
