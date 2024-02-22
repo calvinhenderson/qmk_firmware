@@ -7,9 +7,12 @@
 #define MATRIX_COLS 6
 
 // Show caps lock status on LED indicators
+#define SPLIT_LAYER_STATE_ENABLE
 #define SPLIT_LED_STATE_ENABLE
-#define LED_CAPS_LOCK_PIN B1
+#define SPLIT_LED_STATE_ENABLE
+#define STATUS_LED_PIN B1
 #define LED_PIN_ON_STATE 1
+#define LED_BLINK_MS 1000
 
 /* Split Configuration */
 #define SOFT_SERIAL_PIN D2 // Serial communication

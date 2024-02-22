@@ -30,7 +30,7 @@ enum layers {
 #define SE_LBRC LCTL_T(KC_LBRC)
 #define SE_LCBR LOPT_T(KC_LCBR)
 #define SE_EQL  LCMD_T(KC_EQL)
-#define SE_UNDS RCMD_T(KC_UNDS)
+#define SE_MINS RCMD_T(KC_MINS)
 #define SE_RCBR ROPT_T(KC_RCBR)
 #define SE_RBRC RCTL_T(KC_RBRC)
 #define SE_SCLN HYPR_T(KC_SCLN)
@@ -41,6 +41,8 @@ enum layers {
 #define OS_LOPT OSM(MOD_MASK_ALT)
 #define OS_LCTL OSM(MOD_MASK_GUI)
 
+#define CYC_APP G(KC_TAB)
+#define CYC_WIN G(KC_GRAVE)
 #define WWW_NXT G(KC_RBRC)
 #define WWW_PRV G(KC_LBRC)
 #define TAB_NXT C(KC_TAB)

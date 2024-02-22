@@ -1,6 +1,7 @@
 #include QMK_KEYBOARD_H
 #include "layout.h"
 #include "keycodes.h"
+#include "led_status.h"
 
 /* KEYMAPS */
 enum custom_keycodes {
@@ -43,20 +44,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                _______, _______,
 
     KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
-    KC_MINS, SE_UNDS, SE_RCBR, SE_RBRC, SE_SCLN,
-    KC_LABK, KC_RABK, SE_LPRN, KC_RPRN, KC_SLSH,
+    KC_PERC, SE_MINS, SE_RCBR, SE_RBRC, SE_SCLN,
+    KC_LABK, KC_RABK, SE_LPRN, KC_DOT,  KC_SLSH,
     _______, _______
   ),
 
   /* Navigation */
   [_NAV] = LAYOUT(
     SE_LOCK, KC_WH_L, KC_MS_U, KC_WH_R, xxxxxxx,
-    KC_ESC,  KC_MS_L, KC_MS_D, KC_MS_R, xxxxxxx,
-    G(KC_Q), KC_TILD, KC_WH_U, KC_WH_D, xxxxxxx,
+    CYC_APP, KC_MS_L, KC_MS_D, KC_MS_R, KC_PGUP,
+    G(KC_Q), KC_TILD, KC_WH_U, KC_WH_D, KC_PGDN,
                                _______, _______,
 
     WWW_PRV, TAB_PRV, TAB_NXT, WWW_NXT, KC_DEL,
-    KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, xxxxxxx,
+    KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, CYC_WIN,
     xxxxxxx, KC_BTN1, KC_BTN2, xxxxxxx, SE_BASE,
     _______, _______
   ),
@@ -74,6 +75,34 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+bool caps_word_press_user(uint16_t keycode) {
+  // handle alphas independetly
+  if (KC_A <= keycode && keycode <= KC_Z) {
+    add_weak_mods(MOD_BIT(KC_LSFT));
+    return true;
+  }
+
+  // handle numbers independetly
+  if (KC_1 <= keycode && keycode <= KC_0) {
+    return true;
+  }
+
+  // custom and one-off keycodes
+  switch (keycode) {
+    case KC_BSPC:
+    case KC_DELETE:
+    case SE_COMM:
+    case SE_DOT:
+    case SE_MINS:
+    case KC_UNDS:
+      // keep caps word on
+      return true;
+    default:
+      // disable caps word
+      return false;
+  }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case SE_RCBR:
@@ -82,7 +111,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
   }
+
   return true;
+}
+
+void housekeeping_task_user(void) {
+  blink_led_callback();
 }
 
 #include "g/keymap_combo.h"
