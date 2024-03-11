@@ -5,7 +5,7 @@
 #define DEBOUNCE 5
 
 // Tap-hold
-#define TAPPING_TERM 240
+#define TAPPING_TERM 300
 #define RETRO_TAPPING
 
 // One-shot modifiers
