@@ -8,6 +8,9 @@
 #define TAPPING_TERM 300
 #define RETRO_TAPPING
 
+// fast switching from tapping to holding
+#define TAPPING_FORCE_HOLD
+
 // One-shot modifiers
 #define ONESHOT_TAP_TOGGLE 2
 #define ONESHOT_TIMEOUT 5000
@@ -19,16 +22,15 @@
 // Combos
 #define COMBO_TERM 50
 
-// Mouse keys
-#define MOUSEKEY_INERTIA
-#define MOUSEKEY_DELAY 5
-#define MOUSEKEY_INTERVAL 16
-#define MOUSEKEY_MAX_SPEED 64
-#define MOUSEKEY_TIME_TO_MAX 64
-#define MOUSEKEY_FRICTION 12
-#define MOUSEKEY_MOVE_DELTA 1
-#define MOUSEKEY_WHEEL_DELAY 20
-#define MOUSEKEY_WHEEL_DELTA 1
-#define MOUSEKEY_WHEEL_INTERVAL 240
-#define MOUSEKEY_WHEEL_MAX_SPEED 1
-#define MOUSEKEY_WHEEL_TIME_TO_MAX 0
+// Mouse-keys
+
+#define MK_COMBINED
+
+#define MOUSEKEY_DELAY          0
+#define MOUSEKEY_INTERVAL       16
+#define MOUSEKEY_MAX_SPEED      12
+#define MOUSEKEY_TIME_TO_MAX    80
+
+// Mouse-wheel
+#define MOUSEKEY_WHEEL_DELAY        0
+#define MOUSEKEY_WHEEL_MAX_SPEED   12
